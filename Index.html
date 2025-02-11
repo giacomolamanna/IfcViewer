@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IFC Viewer</title>
+    <script type="importmap">
+        {
+            "imports": {
+                "web-ifc": "https://unpkg.com/web-ifc@0.0.41/web-ifc-api.js",
+                "three": "https://unpkg.com/three@0.133.1/build/three.module.js",
+                "three/examples/jsm/": "https://unpkg.com/three@0.133.1/examples/jsm/"
+            }
+        }
+    </script>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+        input { position: absolute; top: 10px; left: 10px; z-index: 10; }
+    </style>
+</head>
+<body>
+    <input type="file" id="ifc-file" />
+    <script type="module">
+        import * as THREE from "three";
+        import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+        import { IFCLoader } from "web-ifc";
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+
+        camera.position.set(5, 5, 5);
+        controls.update();
+
+        const ifcLoader = new IFCLoader();
+
+        document.getElementById('ifc-file').addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(file);
+
+            reader.onload = async (e) => {
+                const data = e.target.result;
+                const model = await ifcLoader.parse(data, true);
+                scene.add(model);
+            };
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
