@@ -1,7 +1,7 @@
 
 // Importa le librerie necessarie dai moduli corretti
 import { IFCLoader } from "https://unpkg.com/web-ifc-three@0.0.152/IFCLoader.js";
-import * as THREE from "https://unpkg.com/three@0.133.1/build/three.module.js";
+import { IFCLoader } from "./libs/web-ifc-three/IFCLoader.js";
 import { OrbitControls } from "https://unpkg.com/three@0.133.1/examples/jsm/controls/OrbitControls.js";
 
 document.addEventListener("DOMContentLoaded", function() {
