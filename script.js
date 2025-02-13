@@ -1,33 +1,26 @@
-document.addEventListener("DOMContentLoaded", async function() {
-    const viewer = new IfcViewerAPI({ container: document.body, backgroundColor: new THREE.Color(0xffffff) });
+import { Color } from 'https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.module.js';
+import { IfcViewerAPI } from 'https://cdn.jsdelivr.net/npm/web-ifc-viewer@0.0.42/dist/index.mjs';
 
-    viewer.IFC.setWasmPath("https://unpkg.com/web-ifc@0.0.37/");
+// Ottieni il contenitore per la visualizzazione
+const container = document.getElementById("viewer-container");
 
-    // Controlli della telecamera
-    await viewer.IFC.applyWebIfcConfig();
-    await viewer.IFC.setupThreeScene();
+// Inizializza il visualizzatore IFC
+const viewer = new IfcViewerAPI({ container, backgroundColor: new Color(0xffffff) });
+viewer.axes.setAxes();
+viewer.grid.setGrid();
 
-    // Selezione del file IFC
-    document.getElementById('ifc-file').addEventListener('change', async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
+// Aggiunge l'evento per caricare un file IFC
+const input = document.getElementById("file-input");
+input.addEventListener("change", async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
 
-        document.getElementById("status").innerText = `Caricamento di ${file.name} in corso...`;
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
 
-        const reader = new FileReader();
-        reader.readAsArrayBuffer(file);
-
-        reader.onload = async (e) => {
-            try {
-                const data = e.target.result;
-                const model = await viewer.IFC.loadIfc(new Uint8Array(data));
-                console.log("Modello IFC caricato:", model);
-                document.getElementById("status").innerText = `Caricamento completato: ${file.name}`;
-            } catch (error) {
-                console.error("Errore nel caricamento IFC:", error);
-                alert("Errore nel caricamento del file IFC.");
-                document.getElementById("status").innerText = "Errore nel caricamento del file.";
-            }
-        };
-    });
+    reader.onload = async (e) => {
+        const data = e.target.result;
+        const model = await viewer.IFC.loadIfc(data);
+        console.log("Modello IFC caricato:", model);
+    };
 });
