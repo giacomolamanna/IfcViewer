@@ -1,4 +1,7 @@
+// Importa le librerie necessarie
 import { IFCLoader } from "https://unpkg.com/web-ifc-three@0.0.41/dist/web-ifc-three.module.js";
+import * as THREE from "https://unpkg.com/three@0.133.1/build/three.module.js";
+import { OrbitControls } from "https://unpkg.com/three@0.133.1/examples/jsm/controls/OrbitControls.js";
 
 document.addEventListener("DOMContentLoaded", function() {
     // Creazione della scena Three.js
@@ -10,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.body.appendChild(renderer.domElement);
 
     // Controlli orbitali
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     camera.position.set(5, 5, 5);
     controls.update();
@@ -56,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 progressBar.style.width = "100%"; // Completato
 
                 const data = e.target.result;
-                const model = await ifcLoader.load(data);
+                const model = await ifcLoader.parse(data); // Metodo corretto per caricare il modello
                 console.log("Modello IFC caricato:", model);
                 scene.add(model);
                 renderer.render(scene, camera);
