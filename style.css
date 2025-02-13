@@ -1,0 +1,35 @@
+body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
+canvas { display: block; }
+input { position: absolute; top: 10px; left: 10px; z-index: 10; }
+
+/* Stile per il messaggio di stato */
+#status {
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Barra di avanzamento */
+#progress-container {
+    position: absolute;
+    top: 80px;
+    left: 10px;
+    width: 200px;
+    height: 10px;
+    background: #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    display: none; /* Inizialmente nascosto */
+}
+
+#progress-bar {
+    width: 0%;
+    height: 100%;
+    background: #4CAF50;
+    transition: width 0.2s;
+}
