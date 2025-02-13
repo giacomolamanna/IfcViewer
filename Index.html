@@ -4,15 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IFC Viewer</title>
-    <script type="importmap">
-        {
-            "imports": {
-                "web-ifc": "https://unpkg.com/web-ifc@0.0.41/web-ifc-api.js",
-                "three": "https://unpkg.com/three@0.133.1/build/three.module.js",
-                "three/examples/jsm/": "https://unpkg.com/three@0.133.1/examples/jsm/"
-            }
-        }
-    </script>
+    <script src="https://unpkg.com/three@0.133.1/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.133.1/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://unpkg.com/web-ifc-three@0.0.41/dist/web-ifc-three.js"></script>
     <style>
         body { margin: 0; overflow: hidden; }
         canvas { display: block; }
@@ -20,47 +14,53 @@
     </style>
 </head>
 <body>
-    <input type="file" id="ifc-file" />
-    <script type="module">
-        import * as THREE from "three";
-        import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-        import { IFCLoader } from "web-ifc";
+    <input type="file" id="ifc-file" accept=".ifc"/>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
 
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-
-        camera.position.set(5, 5, 5);
-        controls.update();
-
-        const ifcLoader = new IFCLoader();
-
-        document.getElementById('ifc-file').addEventListener('change', async (event) => {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.readAsArrayBuffer(file);
-
-            reader.onload = async (e) => {
-                const data = e.target.result;
-                const model = await ifcLoader.parse(data, true);
-                scene.add(model);
-            };
-        });
-
-        function animate() {
-            requestAnimationFrame(animate);
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            camera.position.set(5, 5, 5);
             controls.update();
-            renderer.render(scene, camera);
-        }
-        animate();
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+            scene.add(ambientLight);
+
+            const ifcLoader = new IfcThree.IfcLoader();
+            ifcLoader.ifcManager.setWasmPath("https://unpkg.com/web-ifc@0.0.41/");
+
+            document.getElementById('ifc-file').addEventListener('change', async (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.readAsArrayBuffer(file);
+
+                reader.onload = async (e) => {
+                    try {
+                        const data = e.target.result;
+                        const model = await ifcLoader.load(data);
+                        scene.add(model);
+                    } catch (error) {
+                        console.error("Errore nel caricamento dell'IFC:", error);
+                        alert("Impossibile caricare il file IFC. Assicurati che sia valido.");
+                    }
+                };
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
+        });
     </script>
 </body>
 </html>
