@@ -1,5 +1,5 @@
-// Importa le librerie necessarie
-import { IFCLoader } from "https://unpkg.com/web-ifc-three@0.0.41/dist/web-ifc-three.module.js";
+// Importa le librerie necessarie dai moduli corretti
+import { IFCLoader } from "https://unpkg.com/web-ifc-three@0.0.108/dist/web-ifc-three.mjs";
 import * as THREE from "https://unpkg.com/three@0.133.1/build/three.module.js";
 import { OrbitControls } from "https://unpkg.com/three@0.133.1/examples/jsm/controls/OrbitControls.js";
 
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Inizializza il loader IFC
     const ifcLoader = new IFCLoader();
-    ifcLoader.ifcManager.setWasmPath("https://unpkg.com/web-ifc@0.0.41/");
+    ifcLoader.ifcManager.setWasmPath("https://unpkg.com/web-ifc@0.0.108/");
 
     // Selezione elementi UI
     const status = document.getElementById("status");
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 progressBar.style.width = "100%"; // Completato
 
                 const data = e.target.result;
-                const model = await ifcLoader.parse(data); // Metodo corretto per caricare il modello
+                const model = await ifcLoader.parse(data);
                 console.log("Modello IFC caricato:", model);
                 scene.add(model);
                 renderer.render(scene, camera);
