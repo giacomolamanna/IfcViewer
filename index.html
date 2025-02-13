@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IFC Viewer</title>
+    
+    <!-- Librerie necessarie -->
     <script src="https://unpkg.com/three@0.133.1/build/three.min.js"></script>
     <script src="https://unpkg.com/three@0.133.1/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://unpkg.com/web-ifc-three@0.0.41/dist/web-ifc-three.js"></script>
+    <script src="https://unpkg.com/web-ifc-three@0.0.41/dist/web-ifc-three.min.js"></script>
+
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:,"> <!-- Evita l'errore della favicon -->
 </head>
 <body>
     <input type="file" id="ifc-file" accept=".ifc"/>
@@ -15,6 +19,7 @@
     <div id="progress-container">
         <div id="progress-bar"></div>
     </div>
+    
     <script src="script.js"></script>
 </body>
 </html>
