@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Creazione della scena
+    // Creazione della scena Three.js
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -18,10 +18,10 @@ document.addEventListener("DOMContentLoaded", function() {
     scene.add(ambientLight);
 
     // Inizializza il loader IFC
-    const ifcLoader = new IfcThree.IfcLoader();
+    const ifcLoader = new IFCLoader();
     ifcLoader.ifcManager.setWasmPath("https://unpkg.com/web-ifc@0.0.41/");
 
-    // Selezione degli elementi UI
+    // Selezione elementi UI
     const status = document.getElementById("status");
     const progressBarContainer = document.getElementById("progress-container");
     const progressBar = document.getElementById("progress-bar");
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const reader = new FileReader();
 
-        // Aggiornamento della barra di avanzamento
+        // Aggiornamento barra di avanzamento
         reader.onprogress = function(e) {
             if (e.lengthComputable) {
                 let percentLoaded = (e.loaded / e.total) * 100;
