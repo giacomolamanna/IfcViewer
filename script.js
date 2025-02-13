@@ -1,3 +1,5 @@
+import { IFCLoader } from "https://unpkg.com/web-ifc-three@0.0.41/dist/web-ifc-three.module.js";
+
 document.addEventListener("DOMContentLoaded", function() {
     // Creazione della scena Three.js
     const scene = new THREE.Scene();
