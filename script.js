@@ -1,5 +1,6 @@
+
 // Importa le librerie necessarie dai moduli corretti
-import { IFCLoader } from "https://unpkg.com/web-ifc-three@0.0.108/IFCLoader.js";
+import { IFCLoader } from "https://unpkg.com/web-ifc-three@0.0.152/IFCLoader.js";
 import * as THREE from "https://unpkg.com/three@0.133.1/build/three.module.js";
 import { OrbitControls } from "https://unpkg.com/three@0.133.1/examples/jsm/controls/OrbitControls.js";
 
@@ -24,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Inizializza il loader IFC
     const ifcLoader = new IFCLoader();
-    ifcLoader.ifcManager.setWasmPath("https://unpkg.com/web-ifc@0.0.108/");
+    ifcLoader.ifcManager.setWasmPath("https://unpkg.com/web-ifc@0.0.152/");
 
     // Selezione elementi UI
     const status = document.getElementById("status");
